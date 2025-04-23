@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Notifications</title>
+    <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+            integrity="sha512-pzw9KZl+WjYhRXuZ+QUnJ7+qTwO+cPJCi6n1N1gqmPqGzsVUSkP5ljxNnKOh+MmF1wpj9wzhbkMb2dE3rYfsvA=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"
+    />
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: sans-serif; color: #222; }
+        .container { display: flex; min-height: 100vh; }
+        /* Sidebar */
+        .sidebar {
+            width: 240px;
+            background: #e6e6e6;
+            display: flex;
+            flex-direction: column;
+            padding: 16px;
+        }
+        .sidebar h2 { margin-bottom: 1rem; }
+        .sidebar nav ul { list-style: none; }
+        .sidebar nav li {
+            padding: 8px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        .sidebar nav li.active,
+        .sidebar nav li:hover {
+            background: #fff;
+        }
+        .sidebar nav li .submenu {
+            margin-left: 16px;
+            font-size: 0.9rem;
+        }
+        .sidebar .help { margin-top: auto; font-size: 0.9rem; display: flex; align-items: center; }
+        .sidebar .help i { margin-right: 8px; }
+
+        /* Main panel */
+        .main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .header {
+            background: #d9d9d9;
+            padding: 12px 24px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .header .search input {
+            width: 280px;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 6px;
+        }
+        .header .actions {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .header .btn-pay {
+            background: #fff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .header .actions i {
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+        .header .actions img.avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            object-fit: cover;
+            cursor: pointer;
+        }
+
+        /* Content */
+        .content {
+            flex: 1;
+            padding: 24px;
+            display: flex;
+            gap: 24px;
+        }
+        .content h1 {
+            font-size: 2rem;
+            margin-bottom: 16px;
+        }
+
+        /* Notifications list */
+        .notifications-panel {
+            background: #d3d3d3;
+            flex: 2;
+            border-radius: 8px;
+            padding: 16px;
+        }
+        .notifications-panel .panel-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        .notifications-panel .panel-header h2 {
+            flex: 1;
+            font-size: 1.2rem;
+        }
+        .notifications-panel .panel-header .btn-timeframe {
+            background: #fff;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        .notification-item {
+            display: flex;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid #bbb;
+        }
+        .notification-item:last-child { border-bottom: none; }
+        .notification-item img.avatar-sm {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .notification-item .text {
+            flex: 1;
+        }
+        .notification-item .text .title {
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+        .notification-item .text .subtitle {
+            font-size: 0.9rem;
+            color: #444;
+            margin-bottom: 6px;
+        }
+        .notification-item .text .message {
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+        .notification-item .actions {
+            font-size: 0.9rem;
+            display: flex;
+            gap: 16px;
+        }
+        .notification-item .timestamp {
+            font-size: 0.8rem;
+            color: #555;
+            margin-left: 12px;
+            white-space: nowrap;
+        }
+        .notification-item .unread-dot {
+            width: 10px;
+            height: 10px;
+            background: #555;
+            border-radius: 50%;
+            margin-left: 6px;
+            align-self: center;
+        }
+
+        /* Filter sidebar */
+        .filter-panel {
+            background: #d3d3d3;
+            width: 200px;
+            border-radius: 8px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+        }
+        .filter-panel h2 {
+            font-size: 1.1rem;
+            margin-bottom: 12px;
+        }
+        .filter-panel .filters {
+            list-style: none;
+            flex: 1;
+        }
+        .filter-panel .filters li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            font-size: 0.95rem;
+        }
+        .filter-panel .filters li input {
+            width: 18px;
+            height: 18px;
+        }
+        .filter-panel .btn-group {
+            display: flex;
+            gap: 8px;
+        }
+        .filter-panel .btn {
+            flex: 1;
+            padding: 8px 0;
+            border: none;
+            border-radius: 6px;
+            background: #fff;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <h2>Notification</h2>
+        <nav>
+            <ul>
+                <li class="active"><i class="fas fa-shopping-cart"></i> View Notification</li>
+                <li><i class="fas fa-credit-card"></i> Payment
+                    <ul class="submenu">
+                        <li>Order Status</li>
+                        <li>Track</li>
+                        <li>Order Scheduled</li>
+                        <li>Order Comments</li>
+                    </ul>
+                </li>
+                <li><i class="fas fa-chart-line"></i> Payment Status
+                    <ul class="submenu">
+                        <li>Order Dashboard</li>
+                        <li>Refund Request</li>
+                        <li>Payment</li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+        <div class="help">
+            <i class="fas fa-info-circle"></i>
+            Help &amp; Support
+        </div>
+    </aside>
+
+    <!-- Main content -->
+    <div class="main">
+        <!-- Top bar -->
+        <header class="header">
+            <div class="search">
+                <input type="text" placeholder="Search for items" />
+            </div>
+            <div class="actions">
+                <button class="btn-pay">Pay</button>
+                <i class="fas fa-comment-dots"></i>
+                <i class="fas fa-bell"></i>
+                <img
+                        class="avatar"
+                        src="./image/user.png"
+                        alt="User Avatar"
+                />
+            </div>
+        </header>
+
+        <!-- Page content -->
+        <div class="content">
+            <!-- Notifications list -->
+            <section class="notifications-panel">
+                <div class="panel-header">
+                    <h2>New Notifications</h2>
+                    <button class="btn-timeframe">This week’s updates</button>
+                </div>
+
+                <!-- Notification item -->
+                <div class="notification-item">
+                    <img
+                            class="avatar-sm"
+                            src="./image/user2.png"
+                            alt="User Avatar"
+                    />
+                    <div class="text">
+                        <div class="title">New Notification: Payment Received</div>
+                        <div class="subtitle">on Order #3600</div>
+                        <div class="message">
+                            Payment successfully processed. Thank you!
+                        </div>
+                        <div class="actions">
+                            <span>Like</span>
+                            <span>Reply</span>
+                        </div>
+                    </div>
+                    <div class="timestamp">1 hour ago</div>
+                    <div class="unread-dot"></div>
+                </div>
+
+                <!-- Notification item -->
+                <div class="notification-item">
+                    <img
+                            class="avatar-sm"
+                            src="./image/user2.png"
+                            alt="User Avatar"
+                    />
+                    <div class="text">
+                        <div class="title">New Feedback: Great Service!</div>
+                        <div class="subtitle">on Order #3600</div>
+                        <div class="message">
+                            Thank you for the positive feedback!
+                        </div>
+                        <div class="actions">
+                            <span>Like</span>
+                            <span>Reply</span>
+                        </div>
+                    </div>
+                    <div class="timestamp">1 hour ago</div>
+                    <div class="unread-dot"></div>
+                </div>
+            </section>
+
+            <!-- Filter sidebar -->
+            <aside class="filter-panel">
+                <h2>Filter Options</h2>
+                <ul class="filters">
+                    <li>
+                        <span>Comments Filter</span>
+                        <input type="checkbox" checked />
+                    </li>
+                    <li>
+                        <span>Likes Filter</span>
+                        <input type="checkbox" checked />
+                    </li>
+                    <li>
+                        <span>Review Filter</span>
+                        <input type="checkbox" checked />
+                    </li>
+                    <li>
+                        <span>Mentions Filter</span>
+                        <input type="checkbox" checked />
+                    </li>
+                    <li>
+                        <span>Purchases Filter</span>
+                        <input type="checkbox" checked />
+                    </li>
+                    <li>
+                        <span>Message Filter</span>
+                        <input type="checkbox" checked />
+                    </li>
+                </ul>
+                <div class="btn-group">
+                    <button class="btn">Select All</button>
+                    <button class="btn">Unselect All</button>
+                </div>
+            </aside>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>PaymentPro Landing</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- FontAwesome for icons -->
+  <script  crossorigin="anonymous"></script>
+  <style>
+    /* Reset & base */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', Tahoma, sans-serif; color: #111; line-height: 1.4; }
+    img { max-width: 100%; display: block; }
+    a { text-decoration: none; color: inherit; }
+    button { cursor: pointer; }
+
+    /* Layout */
+    .wrapper { max-width: 1200px; margin: 0 auto; padding: 20px; }
+    header, footer { width: 100%; }
+    nav { display: flex; align-items: center; justify-content: space-between; }
+    nav .left, nav .center, nav .right { display: flex; align-items: center; }
+    nav .center { gap: 24px; }
+    nav .right { gap: 16px; }
+    hr { border: none; border-top: 1px solid #eee; margin: 12px 0 20px; }
+
+    /* Hero */
+    .hero { display: flex; align-items: center; justify-content: space-between; gap: 40px; margin-bottom: 60px; }
+    .hero .text { max-width: 520px; }
+    .hero h1 { font-size: 2.5rem; margin-bottom: 12px; }
+    .hero p { font-size: 1rem; color: #555; margin-bottom: 24px; }
+    .hero .actions { display: flex; gap: 12px; }
+    .hero .actions .search-box {
+      position: relative; flex: 1;
+    }
+    .hero .actions input {
+      width: 100%; padding: 12px 44px 12px 16px; border: 1px solid #ddd; border-radius: 4px;
+      font-size: 1rem;
+    }
+    .hero .actions .search-box i {
+      position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+      color: #888;
+    }
+    .hero .actions button {
+      padding: 12px 24px; background: #111; color: #fff; border: none; border-radius: 4px;
+      font-size: 1rem;
+    }
+
+    /* Order Summary */
+    .order-summary { text-align: center; margin-bottom: 60px; }
+    .order-summary h2 { font-size: 1.5rem; margin-bottom: 24px; }
+    .order-summary .icons {
+      display: flex; justify-content: center; gap: 24px; flex-wrap: wrap;
+    }
+    .order-summary .icons .icon-card {
+      background: #d3d3d8; width: 120px; height: 120px;
+      border-radius: 8px; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 8px;
+      font-weight: bold; color: #111;
+    }
+    .order-summary .icons img { width: 48px; height: 48px; }
+
+    /* Main two‐column section */
+    .main-two { display: flex; gap: 20px; margin-bottom: 60px; }
+    .sidebar { width: 280px; display: flex; flex-direction: column; gap: 24px; }
+    .sidebar .panel {
+      background: #d3d3d8; border-radius: 8px; padding: 16px; text-align: center;
+    }
+    .sidebar .panel h3 { font-size: 1.1rem; margin-bottom: 8px; }
+    .sidebar .panel h4 { font-size: 0.9rem; color: #555; margin-bottom: 12px; }
+    .sidebar .panel .badge {
+      position: relative; display: inline-block; margin-bottom: 16px;
+    }
+    .sidebar .panel .badge span {
+      position: absolute; top: -8px; right: -8px;
+      background: #fff; padding: 4px 6px; border-radius: 50%; font-size: 0.75rem; font-weight: bold;
+    }
+    .sidebar .panel button {
+      padding: 10px 20px; background: #fff; color: #111; border: none; border-radius: 4px; font-weight: bold;
+    }
+    .sidebar .panel.black {
+      background: #111; color: #fff;
+    }
+    .sidebar .panel.black .timer {
+      display: flex; justify-content: center; gap: 8px; margin-top: 12px;
+    }
+    .sidebar .panel.black .timer .digit {
+      background: #fff; color: #111; padding: 10px 14px; border-radius: 4px; font-size: 1.5rem;
+    }
+
+    .order-tracking { flex: 1; display: flex; flex-direction: column; gap: 24px; }
+    .order-tracking .header {
+      background: #d3d3d8; border-radius: 8px;
+      padding: 16px; display: flex; justify-content: space-between; align-items: center;
+      font-weight: bold;
+    }
+    .order-tracking .header i { cursor: pointer; margin-left: 8px; }
+    .order-tracking .small-cards {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+    }
+    .order-tracking .small-cards .card {
+      background: #f5f5f7; border-radius: 8px; overflow: hidden;
+    }
+
+    .order-tracking .small-cards img { height: 120px; object-fit: cover; width: 100%; }
+    .order-tracking .small-cards .info { padding: 12px; font-size: 0.9rem; color: #555; }
+    .order-tracking .small-cards .info p { margin-bottom: 8px; }
+    .order-tracking .small-cards .info .meta {
+      display: flex; justify-content: space-between; align-items: center; font-weight: bold;
+    }
+    .order-tracking .small-cards .info .meta i { cursor: pointer; }
+
+    .order-tracking .status {
+      background: #d3d3d8; border-radius: 8px;
+      padding: 12px 16px; display: flex; align-items: center; gap: 8px;
+      font-weight: bold;
+    }
+    .order-tracking .status i { font-size: 1.2rem; }
+
+    .order-tracking .big-cards {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;
+    }
+    .order-tracking .big-cards .big-card {
+      position: relative; border-radius: 8px; overflow: hidden;
+    }
+    .order-tracking .big-cards img { width: 100%; height: 180px; object-fit: cover; }
+    .order-tracking .big-cards .overlay {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      display: flex; flex-direction: column; justify-content: center;
+      align-items: center; color: #111; text-align: center;
+      text-shadow: 0 0 6px rgba(255,255,255,0.8);
+    }
+    .order-tracking .big-cards .overlay button {
+      margin-top: 12px; padding: 10px 20px; border: none; background: #111; color: #fff; border-radius: 4px;
+    }
+
+    /* Receive notifications */
+    .notifications { background: #d3d3d8; padding: 60px 20px; margin-bottom: 60px; }
+    .notifications h2 { text-align: center; margin-bottom: 40px; font-size: 1.5rem; }
+    .notifications .cards {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+    }
+    .notifications .cards .card {
+      background: #fff; border-radius: 8px; overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    .notifications .cards img { height: 140px; width: 100%; object-fit: cover; }
+    .notifications .cards .info { padding: 16px; }
+    .notifications .cards .info h3 { margin-bottom: 8px; }
+    .notifications .cards .info p { color: #555; margin-bottom: 16px; }
+    .notifications .cards .info .author {
+      display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: #555;
+    }
+    .notifications .cards .info .author img {
+      width: 28px; height: 28px; border-radius: 50%;
+    }
+
+    /* Subscribe & footer */
+    .subscribe { display: flex; align-items: center; justify-content: space-between;
+      padding: 20px 0; border-top: 1px solid #ccc; border-bottom: 1px solid #ccc; margin-bottom: 40px;
+    }
+    .subscribe p { font-size: 1rem; }
+    .subscribe .sub-form {
+      display: flex; gap: 8px;
+    }
+    .subscribe input {
+      padding: 8px 12px; border: 1px solid #ddd; border-radius: 4px; min-width: 200px;
+    }
+    .subscribe button {
+      padding: 8px 16px; background: #111; color: #fff; border: none; border-radius: 4px;
+    }
+
+    footer .help-center { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; }
+    footer .help-center .social {
+      display: flex; gap: 12px; margin-top: 12px;
+    }
+    footer .help-center .social i { font-size: 1.2rem; }
+
+    footer .links { display: flex; justify-content: space-between; margin-top: 40px; flex-wrap: wrap; gap: 40px; }
+    footer .links div h4 { margin-bottom: 12px; font-size: 1rem; }
+    footer .links div ul { list-style: none; }
+    footer .links div ul li { margin-bottom: 8px; }
+    span .cardStyle {
+    color:#030303;
+    font-size: 18px;
+      font-family: Poppins, sans-serif;
+      font-weight: 700;
+      line-height: 18px;   "
+    }
+  </style>
+</head>
+<body>
+<div class="wrapper">
+  <!-- Header / Nav -->
+  <header>
+    <nav>
+      <div class="left">
+        <i class="fas fa-credit-card fa-lg"></i>
+      </div>
+      <div class="center">
+        <a href="cart.html">VIEW</a>
+        <a >ENTER</a>
+        <a href="order-status.html">TRAC</a>
+        <a href="notifications.html">NOTIFICA</a>
+      </div>
+      <div class="right">
+        <i class="fas fa-search"></i>
+        <i class="fas fa-shopping-cart"></i>
+        <i class="fas fa-user"></i>
+      </div>
+    </nav>
+    <hr>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="text">
+      <h1>Ensure safe transactions with PaymentPro</h1>
+      <p>View products by category or brand!</p>
+      <div class="actions">
+        <div class="search-box">
+          <input type="text" placeholder="Enter payment information securely">
+          <i class="fas fa-search"></i>
+        </div>
+        <button onclick="window.location.href='./cart.html'">Pay Now</button>
+      </div>
+    </div>
+    <div class="image">
+      <img src="./image/1.png" alt="Two people exchanging money via phone">
+    </div>
+  </section>
+
+  <!-- Order Summary Icons -->
+  <section class="order-summary">
+    <h2>Order Summary</h2>
+    <div class="icons">
+      <div class="icon-card"><img src="./image/2.png" alt=""><span>Order</span></div>
+      <div class="icon-card"><img src="./image/3.png" alt=""><span>Payment</span></div>
+      <div class="icon-card"><img src="./image/4.png" alt=""><span>Tracing</span></div>
+      <div class="icon-card"><img src="./image/5.png" alt=""><span>Status</span></div>
+      <div class="icon-card"><img src="./image/6.png" alt=""><span>History</span></div>
+    </div>
+  </section>
+
+  <!-- Payment sidebar & Order Tracking -->
+  <div class="main-two">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="panel">
+        <h3>Order</h3>
+        <h4>by</h4>
+        <div class="badge">
+          <img src="./image/7.png" alt="cart illustration">
+
+        </div>
+        <button onclick="window.location.href='./cart.html'">View Items in Cart</button>
+      </div>
+      <div class="panel">
+        <h3>New Payment</h3>
+        <h4>Payment success</h4>
+        <div class="badge">
+          <img src="./image/8.png" alt="coins">
+        </div>
+        <button onclick="window.location.href='payment-success.html'"> Pay with Confidence </button>
+      </div>
+
+      <div class="panel black">
+        <h3>Free Shipping</h3>
+        <h4>Time Left</h4>
+        <div class="timer">
+          <div class="digit" id="minutes">10</div>
+          <div class="digit">:</div>
+          <div class="digit" id="seconds">00</div>
+          <script>
+            function startTimer() {
+              let minutes = 10;
+              let seconds = 0;
+              const timer = setInterval(() => {
+                if (seconds === 0) {
+                  if (minutes === 0) {
+                    clearInterval(timer);
+                    return;
+                  }
+                  minutes--;
+                  seconds = 59;
+                } else {
+                  seconds--;
+                }
+                document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+                document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+              }, 1000);
+            }
+
+            startTimer();
+          </script>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Order Tracking -->
+    <section class="order-tracking">
+      <div class="header">
+        <div><i class="fas fa-credit-card"></i> Order Tracking</div>
+        <div><i class="fas fa-chevron-left"></i><i class="fas fa-chevron-right"></i></div>
+      </div>
+
+      <div class="small-cards">
+        <div class="card">
+          <img src="./image/s.png" alt="">
+          <div class="info">
+            <p>Secure payment</p>
+            <div class="meta">
+              <span style="color:#030303;
+                         font-size: 18px;
+                      font-family: Poppins, sans-serif;
+                        font-weight: 700;
+                        line-height: 18px;   "
+              >Total</span><span>Amount</span><i class="fas fa-ellipsis-h">99</i>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <img src="./image/9.png" alt="">
+          <div class="info">
+            <p>Payment confirmation</p>
+            <div class="meta">
+              <span style="color:#030303;
+                         font-size: 18px;
+                      font-family: Poppins, sans-serif;
+                        font-weight: 700;
+                        line-height: 18px;   ">Total</span><span>Amount</span><i class="fas fa-ellipsis-h">99</i>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <img src="./image/10.png" alt="">
+          <div class="info">
+            <p>Secure online payment</p>
+            <div class="meta">
+              <span style="color:#030303;
+                         font-size: 18px;
+                      font-family: Poppins, sans-serif;
+                        font-weight: 700;
+                        line-height: 18px;   ">Total</span><span>Amount</span><i class="fas fa-heart">99</i>
+            </div>
+          </div>
+        </div>
+<div class="card" onclick="window.location.href='./cart.html';" style="cursor: pointer;">
+  <img src="./image/11.png" alt="">
+  <div class="info">
+    <p>View your cart securely</p>
+    <div class="meta">
+      <span style="color:#030303;
+                font-size: 18px;
+                font-family: Poppins, sans-serif;
+                font-weight: 700;
+                line-height: 18px;">Enter</span><span>Items in cart</span><i class="fas fa-heart">3</i>
+    </div>
+  </div>
+</div>
+        <div class="card">
+          <img src="./image/12.png" alt="">
+          <div class="info">
+            <p>Securely purchase</p>
+            <div class="meta">
+              <span style="color:#030303;
+                         font-size: 18px;
+                      font-family: Poppins, sans-serif;
+                        font-weight: 700;
+                        line-height: 18px;   ">Total:</span><span>num</span><i class="fas fa-heart">99</i>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <img src="./image/13.png" alt="">
+          <div class="info">
+            <p>Receive notifications</p>
+            <div class="meta">
+              <span style="color:#030303;
+                         font-size: 18px;
+                      font-family: Poppins, sans-serif;
+                        font-weight: 700;
+                        line-height: 18px;   ">Total:</span><span></span><i class="fas fa-heart">99</i>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="status">
+        <i class="fas fa-paw"></i> Track Order Status
+      </div>
+
+      <div class="big-cards">
+        <div class="big-card">
+          <img src="./image/14.png" alt="" style="filter: blur(5px);">
+          <div class="overlay">
+            <h3>Order Tracking</h3>
+            <p>Track your order and delivery</p>
+            <button>Track Now</button>
+          </div>
+        </div>
+        <div class="big-card">
+          <img src="./image/15.png" alt="" style="filter: blur(5px);">
+          <div class="overlay">
+            <h3>Payment Security</h3>
+            <p>Secure payment</p>
+            <button>Learn More</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Receive notifications -->
+  <section class="notifications">
+    <h2>Receive notifications</h2>
+    <div class="cards">
+      <div class="card">
+        <img src="./image/16.png" alt="">
+        <div class="info">
+          <h3>Order Notification Settings</h3>
+          <p>Set up notifications for order updates and status</p>
+          <div class="author">
+            <img src="./image/setting.png" alt="Dr. May">
+            <span>Notification is delivered to your phone *** 1234</span>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <img src="./image/19.png" alt="">
+        <div class="info">
+          <h3>Payment Confirmation Email</h3>
+          <p>Check your email for payment confirmation details</p>
+          <div class="author">
+            <img src="./image/email.png" alt="Dr. May">
+            <span>Email was sent to abc****@***.com</span>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <img src="./image/20.png" alt="">
+        <div class="info">
+          <h3>Payment Success Page</h3>
+          <p>View the success page for payment confirmation details</p>
+          <div class="author">
+            <img src="./image/pay.png" alt="Dr. May">
+            <span>Your last payment was <script>document.write(new Date().toLocaleString())</script></span>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Subscribe & Footer -->
+  <div class="subscribe">
+    <p>Stay connected! Subscribe for exclusive offers and updates.</p>
+    <form class="sub-form">
+      <input type="email" placeholder="Enter email">
+      <button type="submit">Subscribe</button>
+    </form>
+  </div>
+
+  <footer>
+    <!-- Help Center & Social -->
+    <div class="help-center">
+      <div><strong>Help Center</strong></div>
+      <div class="social">
+        <i class="fab fa-linkedin"></i>
+        <i class="fab fa-twitter"></i>
+        <i class="fab fa-instagram"></i>
+      </div>
+    </div>
+    <!-- Links -->
+    <div class="links">
+      <div>
+        <h4>Assistance</h4>
+        <ul>
+          <li><a href="#">FAQs</a></li>
+          <li><a href="#">Support Services</a></li>
+          <li><a href="#">How-To Articles</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>More</h4>
+        <ul>
+          <li><a href="#">Privacy Guidelines</a></li>
+          <li><a href="#">Site Map</a></li>
+          <li><a href="#">Membership Plans</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Get in Touch</h4>
+        <ul>
+          <li><a href="mailto:info@paymentpro.co">xuchen.sun@hotmail.com</a></li>
+          <li><a href="tel:+1234567890">+437 463 0068</a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+</div>
+</body>
+</html>

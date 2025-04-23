@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>PaymentPro Cart</title>
+  <style>
+    /* Reset & Base */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: Arial, sans-serif; color: #111; background: #f9f9f9; }
+
+    /* Header */
+    header { background: #fff; border-bottom: 1px solid #e0e0e0; }
+    .header-top { display: flex; align-items: center; justify-content: space-between; padding: 12px 24px; }
+    .logo { font-size: 24px; font-weight: bold; }
+    .search { position: relative; }
+    .search input {
+      width: 300px;
+      padding: 8px 16px;
+      border: 1px solid #ccc;
+      border-radius: 24px;
+      outline: none;
+    }
+    .search button {
+      position: absolute;
+      right: 1px;
+
+      border: none;
+      background: #111;
+      color: #fff;
+      padding: 8px 12px;
+      border-radius: 0 20px 20px 0;
+      cursor: pointer;
+    }
+    .proceed-btn {
+      background: #111;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    /* Navigation */
+    nav.nav {
+      display: flex;
+      gap: 24px;
+      padding: 8px 24px;
+      font-size: 14px;
+    }
+    nav.nav a {
+      text-decoration: none;
+      color: #111;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    nav.nav a .icon { font-size: 16px; }
+
+    /* Main Layout */
+    .container { display: flex; gap: 24px; padding: 24px; }
+    .cart-section { flex: 2; background: #fff; padding: 24px; border-radius: 8px; }
+    .summary-section { flex: 1; background: #e0e0e0; padding: 24px; border-radius: 8px; }
+
+    /* Cart Section */
+    .return-shop {
+      display: inline-flex;
+      align-items: center;
+      color: #111;
+      text-decoration: none;
+      margin-bottom: 16px;
+      font-size: 14px;
+    }
+    .return-shop .icon { margin-right: 6px; }
+    .cart-section h1 { font-size: 28px; margin-bottom: 24px; }
+
+    .cart-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+    }
+    .cart-item-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .cart-item-left img {
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+    .details h2 { font-size: 18px; margin-bottom: 4px; }
+    .details p { color: #666; font-size: 14px; margin-bottom: 8px; }
+    .price { font-weight: bold; font-size: 16px; }
+    .price .old { text-decoration: line-through; color: #999; margin-left: 8px; font-weight: normal; }
+
+    .actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .actions .icon { cursor: pointer; font-size: 18px; color: #666; }
+    .actions input {
+      width: 60px;
+      padding: 6px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      text-align: center;
+    }
+
+    /* Summary Section */
+    .summary-section h2 { font-size: 24px; margin-bottom: 24px; }
+    .order-item {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      font-size: 16px;
+    }
+    .promo {
+      display: flex;
+      gap: 8px;
+      margin: 24px 0;
+    }
+    .promo input {
+      flex: 1;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    .promo button {
+      padding: 8px 12px;
+      background: #111;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .total {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 24px;
+    }
+    .pay-btn {
+      width: 100%;
+      padding: 12px;
+      background: #111;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    /* Subscribe Banner */
+    .subscribe-banner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #fff;
+      padding: 20px 24px;
+      margin: 24px;
+      border-radius: 8px;
+    }
+    .subscribe-banner p { font-weight: bold; }
+    .subscribe-banner form {
+      display: flex;
+      gap: 0;
+    }
+    .subscribe-banner input {
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px 0 0 4px;
+      width: 300px;
+    }
+    .subscribe-banner button {
+      padding: 8px 16px;
+      background: #111;
+      color: #fff;
+      border: none;
+      border-radius: 0 4px 4px 0;
+      cursor: pointer;
+    }
+
+    /* Footer */
+    footer .footer-container {
+      display: flex;
+      justify-content: space-between;
+      padding: 24px;
+      background: #fff;
+      border-top: 1px solid #e0e0e0;
+      font-size: 14px;
+    }
+    .footer-column { flex: 1; }
+    .footer-column h3 { margin-bottom: 12px; font-size: 16px; }
+    .footer-column ul { list-style: none; }
+    .footer-column li { margin-bottom: 8px; }
+    .footer-column .social-icons span { font-size: 20px; margin-right: 12px; cursor: pointer; }
+    .contact p,
+    .contact a { margin-bottom: 6px; color: #111; text-decoration: none; display: block; }
+  </style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="header-top">
+    <div class="logo">PaymentPro</div>
+    <div class="search">
+      <label>
+        <input type="text" placeholder="Search" />
+        <button>🔍</button>
+      </label>
+
+    </div>
+    <button class="proceed-btn" onclick="window.location.href='./payment-success.html'">Proceed to payment</button>
+  </div>
+  <nav class="nav">
+    <a href="http://localhost:3000/payment/payment-landing.html"><span class="icon">🏠</span>Home</a>
+    <a href="#"><span class="icon">✨</span>Explore new</a>
+    <a href="#"><span class="icon">🧩</span>Personalized</a>
+    <a href="#"><span class="icon">📚</span>Browse ▼</a>
+    <a href="#"><span class="icon">🎧</span>Discover ▼</a>
+    <a href="#"><span class="icon">🗂️</span>Explore ▼</a>
+    <a href="#"><span class="icon">🏷️</span>Che ▼</a>
+  </nav>
+</header>
+
+<!-- MAIN CONTENT -->
+<div class="container">
+
+  <!-- CART LEFT -->
+  <section class="cart-section">
+    <a href="payment-landing.html" class="return-shop"><span class="icon">←</span>Return to shop</a>
+    <h1>Your Cart</h1>
+
+    <!-- Item 1 -->
+    <div class="cart-item">
+      <div class="cart-item-left">
+        <img src="./image/21.png" alt="Mindfulness" />
+        <div class="details">
+          <h2>Mindfulness Benefits</h2>
+          <p>Butterfly Dreams</p>
+          <div class="price">$24</div>
+        </div>
+      </div>
+      <div class="actions">
+        <span class="icon" onclick="this.closest('.cart-item').remove()">🗑️</span>
+        <input type="number" min="1" value="1" />
+      </div>
+    </div>
+
+    <!-- Item 2 -->
+    <div class="cart-item">
+      <div class="cart-item-left">
+        <img src="./image/22.png" alt="Cocktail Creations" />
+        <div class="details">
+          <h2>Cocktail Creations</h2>
+          <p>Apple Delight</p>
+          <div class="price">
+            $18
+            <span class="old">$28</span>
+          </div>
+        </div>
+      </div>
+      <div class="actions">
+        <span class="icon" onclick="this.closest('.cart-item').remove()">🗑️</span>
+        <input type="number" min="1" value="1" />
+      </div>
+    </div>
+
+    <!-- Item 3 -->
+    <div class="cart-item">
+      <div class="cart-item-left">
+        <img src="./image/23.png" alt="Poolside Chill" />
+        <div class="details">
+          <h2>Poolside Chill</h2>
+          <p>Wet Wonder</p>
+          <div class="price">$9</div>
+        </div>
+      </div>
+      <div class="actions">
+        <span class="icon" onclick="this.closest('.cart-item').remove()">🗑️</span>
+        <input type="number" min="1" value="1" />
+      </div>
+    </div>
+  </section>
+
+  <!-- SUMMARY RIGHT -->
+  <aside class="summary-section">
+    <h2>My Order</h2>
+    <div class="order-item">
+      <span>The Power of Mindfulness</span>
+      <span>$24</span>
+    </div>
+    <div class="order-item">
+      <span>112 Cocktail Recipes</span>
+      <span>$24</span>
+    </div>
+    <div class="order-item">
+      <span>Cool by the Pool</span>
+      <span>$24</span>
+    </div>
+
+    <div class="promo">
+      <input type="text" placeholder="Enter promo code" />
+      <button>Apply code</button>
+    </div>
+
+    <div class="total">
+      <span>Total</span>
+      <span id="total-price">$0.00</span>
+
+    </div>
+
+    <button class="pay-btn" onclick="storeAndNavigate()">Pay now</button>
+  </aside>
+
+</div>
+
+<!-- SUBSCRIBE BANNER -->
+<div class="subscribe-banner">
+  <p>Stay connected! Subscribe for exclusive offers and updates.</p>
+  <form>
+    <input type="email" placeholder="Enter email" />
+    <button type="submit">Subscribe</button>
+  </form>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-container">
+    <div class="footer-column">
+      <h3>Help Center</h3>
+      <div class="social-icons">
+        <span>🔗</span><span>🐦</span><span>📸</span>
+      </div>
+    </div>
+    <div class="footer-column">
+      <h3>Assistance</h3>
+      <ul>
+        <li>FAQs</li>
+        <li>Support Services</li>
+        <li>How‑To Articles</li>
+      </ul>
+    </div>
+    <div class="footer-column">
+      <h3>More</h3>
+      <ul>
+        <li>Privacy Guidelines</li>
+        <li>Site Map</li>
+        <li>Membership Plans</li>
+      </ul>
+    </div>
+    <div class="footer-column contact">
+      <h3>Get in Touch</h3>
+      <p>info@paymentpro.co</p>
+      <p>+123 456 7890</p>
+    </div>
+  </div>
+</footer>
+
+</body>
+<script>
+  // Map cart items to their corresponding order items
+  const itemMapping = {
+    "Mindfulness Benefits": "The Power of Mindfulness",
+    "Cocktail Creations": "112 Cocktail Recipes",
+    "Poolside Chill": "Cool by the Pool"
+  };
+
+  // Function to update all item values and total
+  function updateCartValues() {
+    let grandTotal = 0;
+    
+    // Process each cart item
+    document.querySelectorAll('.cart-item').forEach(item => {
+      const title = item.querySelector('h2').textContent;
+      
+      // Get the price
+      let priceText;
+      const priceElement = item.querySelector('.price');
+      
+      // Handle items with discounted prices (like cocktail)
+      if (priceElement.querySelector('.old')) {
+        // Get text node content (the current price) without the old price
+        priceText = priceElement.childNodes[0].textContent.trim();
+      } else {
+        priceText = priceElement.textContent.trim();
+      }
+      
+      const price = parseFloat(priceText.replace('$', ''));
+      
+      // Get the quantity
+      const quantity = parseInt(item.querySelector('input[type="number"]').value);
+      
+      // Calculate item total
+      const itemTotal = price * quantity;
+      grandTotal += itemTotal;
+      
+      // Find corresponding order item and update it
+      if (itemMapping[title]) {
+        const orderItemName = itemMapping[title];
+        const orderItems = document.querySelectorAll('.order-item');
+        
+        orderItems.forEach(orderItem => {
+          const itemName = orderItem.querySelector('span:first-child').textContent;
+          if (itemName === orderItemName) {
+            orderItem.querySelector('span:nth-child(2)').textContent = `$${itemTotal.toFixed(2)}`;
+          }
+        });
+      }
+    });
+    
+    // Update grand total
+    document.getElementById('total-price').textContent = `$${grandTotal.toFixed(2)}`;
+  }
+  
+  // Function to handle item removal
+  function removeItem(cartItem) {
+    // Get the title of the cart item being removed
+    const title = cartItem.querySelector('h2').textContent;
+    
+    // Remove the cart item itself
+    cartItem.remove();
+    
+    // Find and remove the corresponding order item from the summary
+    if (itemMapping[title]) {
+      const orderItemName = itemMapping[title];
+      const orderItems = document.querySelectorAll('.order-item');
+      
+      orderItems.forEach(orderItem => {
+        const itemName = orderItem.querySelector('span:first-child').textContent;
+        if (itemName === orderItemName) {
+          orderItem.remove();
+        }
+      });
+    }
+    
+    // Update the cart values and total
+    updateCartValues();
+  }
+  
+  // Call function when page loads
+  document.addEventListener('DOMContentLoaded', () => {
+    updateCartValues();
+    
+    // Add event listeners to all quantity inputs
+    document.querySelectorAll('.cart-item input[type="number"]').forEach(input => {
+      input.addEventListener('change', updateCartValues);
+    });
+    
+    // Modify all delete icons to remove both cart item and corresponding order item
+    document.querySelectorAll('.cart-item .icon').forEach(icon => {
+      icon.onclick = function() {
+        const cartItem = this.closest('.cart-item');
+        removeItem(cartItem);
+      };
+    });
+  });
+  function storeAndNavigate() {
+    // Get the current total price
+    const totalPrice = document.getElementById('total-price').textContent;
+
+    // Store it in localStorage
+    localStorage.setItem('cartTotal', totalPrice);
+
+    // Store cart items information
+    const cartItems = [];
+    document.querySelectorAll('.cart-item').forEach(item => {
+      const title = item.querySelector('h2').textContent;
+      const subtitle = item.querySelector('p').textContent;
+      const price = item.querySelector('.price').textContent.split('$')[1].split('\n')[0].trim();
+      const imgSrc = item.querySelector('img').getAttribute('src');
+      const quantity = item.querySelector('input[type="number"]').value;
+
+      cartItems.push({
+        title,
+        subtitle,
+        price,
+        imgSrc,
+        quantity
+      });
+    });
+
+    localStorage.setItem('cartItems', JSON.stringify(cartItems));
+
+    // Navigate to payment success page
+    window.location.href = './payment-success.html';
+  }
+  document.addEventListener('DOMContentLoaded', function() {
+    // Get the total from localStorage
+    const cartTotal = localStorage.getItem('cartTotal') || '$0.00';
+
+    // Update the total in three places:
+
+    // 1. Order info section
+    const orderInfoTotalElement = document.querySelector('.info-grid .col p:nth-child(3)');
+    if (orderInfoTotalElement) {
+      orderInfoTotalElement.innerHTML = `<strong>Total:</strong> ${cartTotal}`;
+    }
+
+    // 2. Summary section total
+    const summaryTotalElement = document.querySelector('.totals.total span:last-child');
+    if (summaryTotalElement) {
+      summaryTotalElement.textContent = cartTotal;
+    }
+
+    // 3. Update subtotal to be consistent (remove shipping cost)
+    const subtotalElement = document.querySelector('.totals:not(.total) span:last-child');
+    if (subtotalElement && summaryTotalElement) {
+      const totalValue = parseFloat(cartTotal.replace('$', ''));
+      const shippingValue = 2.00; // Based on your current hardcoded value
+      const subtotalValue = totalValue - shippingValue;
+      subtotalElement.textContent = `$${subtotalValue.toFixed(2)}`;
+    }
+
+    // Optional: update order details items to match cart items
+    // This would require storing more information about the cart items
+  });
+
+</script>
